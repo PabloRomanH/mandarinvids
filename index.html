@@ -1,8 +1,21 @@
-<html>
+<html ng-app="mandarinvids">
 	<head>
-		<title>Chinese Vids</title>
+		<title>Mandarin Vids</title>
 	</head>
 	<body>
-		<p>Fill this with videos in Chinese</p>
+		<div ng-controller="TvController as tvCtrl">
+		  <div class="tv">
+		  	<div class="tv-container">
+		  		<a class="btn btn-default pull-right tv-button" href="#" role="button" ng-click="tvCtrl.playNext()" ng-disabled="tvCtrl.idx == tvCtrl.videos.length">
+		  	  	Play Next <i class="fa fa-fast-forward"></i>
+		  		</a>
+		  		<p class="title-cine">{{ tvCtrl.videos[tvCtrl.idx].title }}</p>
+		  		<div class="clearfix"></div>
+		  	</div>
+		  	<div class="cinetv">
+		  		  <youtube-video video-id="tvCtrl.videoId" player-vars="tvCtrl.playerVars" player="tvCtrl.player" player-width="'955px'" player-height="'567px'"></youtube-video>
+		  	</div>
+		  </div>
+		</div>
 	</body>
 </html>
