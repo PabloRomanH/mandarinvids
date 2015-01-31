@@ -1,0 +1,39 @@
+
+<template id="youtube-template">
+	<iframe src="http://www.youtube.com/embed/{{ id }}?rel=0&autoplay=1">
+	</iframe>
+</template>
+
+<template id="56-template">
+	<iframe src="http://www.56.com/iframe/{{ id }}?auto=1"></iframe>
+</template>
+
+<template id="iqiyi-template">
+	<embed src="http://player.video.qiyi.com/{{ id }}.swf-pid=0-ptype=0-albumId=111999-tvId=90801-cnId=5-autoplay=1-qitanId=0-isDrm=0-isPurchase=0-coop=coop_tianyacnqtocttf-cid=qc_100001_300024" quality="high" allowScriptAccess="always" type="application/x-shockwave-flash" />
+	<!-- id is in the format: 8debcda4e7510fee4e52c6f5977d2593/0/121/v_19rrn89ck0 -->
+</template>
+
+<template id="letv-template">
+	<embed src="http://i7.imgs.letv.com/player/swfPlayer.swf?id={{ id }}&autoplay=1" type="application/x-shockwave-flash" />
+</template>
+
+<template id="qq-template">
+	<embed src="http://static.video.qq.com/TPout.swf?vid={{ id }}&auto=1" quality="high" allowScriptAccess="always" type="application/x-shockwave-flash" />
+</template>
+
+<template id="tudou-template">
+	<embed src="http://www.tudou.com/l/{{ id }}/&autoPlay=true/v.swf" type="application/x-shockwave-flash" allowscriptaccess="always" />
+	<!-- id is in the format: q00jq0WdlN4/&iid=221758577 -->
+</template>
+
+<template id="sohu-template">
+	<embed allowscriptaccess="always" quality="high" src="http://share.vrs.sohu.com/{{ id }}/v.swf&topBar=1&autoplay=true&from=page" type="application/x-shockwave-flash" />
+</template>
+
+<template id="youku-template">
+	<embed src="http://player.youku.com/player.php/sid/{{ id }}/v.swf" flashvars="isAutoPlay=true" quality="high" allowScriptAccess="always" type="application/x-shockwave-flash" />
+</template>
+
+<template id="sina-template">
+	<embed src="http://you.video.sina.com.cn/api/sinawebApi/outplayrefer.php/video_id={{ id }}/s.swf" type="application/x-shockwave-flash" name="ssss" allowScriptAccess="always"></embed>
+</template>
