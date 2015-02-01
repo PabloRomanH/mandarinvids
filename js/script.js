@@ -2,40 +2,24 @@ $(document).ready(function() {
 
 	var videos = [
 		{
-			source: 'iqiyi',
-			id: 'eff86e16cb1c48658ff675db57e5748c/0/0/yinyue/20110426/4845a9895fc99773'
-		},
-		{
-			source: 'youku',
-			id: 'XODgwMjQ2MTE2'
-		},
-		{
-			source: 'tudou',
-			id: 'q00jq0WdlN4/&iid=221758577'
-		},
-		{
-			source: '56',
-			id: 'MTM0NDU1NDk3'
-		},
-		{
-			source: 'sina',
-			id: '202598574'
-		},
-		{
-			source: 'letv',
-			id: '21798378'
+			source: 'youtube',
+			id: 'nIji3qgEFsc',
+			date: '2015-02-01T08:06:57.718Z'
 		},
 		{
 			source: 'youtube',
-			id: 'XGSy3_Czz8k'
+			id: 'QRZ5TfMGMAE',
+			date: '2015-02-01T08:06:57.718Z'
 		},
 		{
-			source: 'qq',
-			id: 'l00152s4scd'
+			source: 'youtube',
+			id: 'I1_hdPqRA_Q',
+			date: '2015-02-01T08:06:57.718Z'
 		},
 		{
-			source: 'sohu',
-			id: '2217243'
+			source: 'iqiyi',
+			id: 'b6d23fec3c24ae0a61dba33eb34a5202/0/0/w_19rrepgucl',
+			date: '2015-02-01T08:06:57.718Z'
 		}
 	];
 
