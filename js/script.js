@@ -1,76 +1,15 @@
 $(document).ready(function() {
-
-	var videos = [
-		{
-			source: 'iqiyi',
-			id: 'ab15fe10eeda46eb9ccb68aa85a27a03/0/0/v_19rrifmckv.swf-albumId=285098-tvId=341827-isPurchase=2-cnId=1',
-			date: '2015-02-01T08:06:57.718Z'
-		},
-		{
-			source: 'youtube',
-			id: 'r2PoBAZeWPo',
-			date: '2015-02-02T08:06:57.718Z'
-		},
-		{
-			source: 'youtube',
-			id: 'g1na24Bd5Rs',
-			date: '2015-02-02T08:06:57.718Z'
-		},
-		{
-			source: 'iqiyi',
-			id: 'b6d23fec3c24ae0a61dba33eb34a5202/0/0/w_19rrepgucl.swf-albumId=897022409-tvId=897022409-isPurchase=0-cnId=25',
-			date: '2015-02-01T08:06:57.718Z'
-		},
-		{
-			source: 'youtube',
-			id: 'DIPGLKZ76xk',
-			date: '2015-02-02T08:06:57.718Z'
-		},
-		{
-			source: 'youtube',
-			id: 'NdzGQInkg-w',
-			date: '2015-02-02T08:06:57.718Z'
-		},
-		{
-			source: 'youtube',
-			id: 'kypaX1ch7g0',
-			date: '2015-02-02T08:06:57.718Z'
-		},
-		{
-			source: 'youtube',
-			id: 'kBADhKRujdM',
-			date: '2015-02-02T08:06:57.718Z'
-		},
-		{
-			source: 'youtube',
-			id: 'yelfxueMlvc',
-			date: '2015-02-02T08:06:57.718Z'
-		},
-		{
-			source: 'youtube',
-			id: 'mDHIAY1h-3M',
-			date: '2015-02-02T08:06:57.718Z'
-		},
-		{
-			source: 'youtube',
-			id: 'QRZ5TfMGMAE',
-			date: '2015-02-01T08:06:57.718Z'
-		},
-		{
-			source: 'youtube',
-			id: 'nIji3qgEFsc',
-			date: '2015-02-01T08:06:57.718Z'
-		},
-		{
-			source: 'youtube',
-			id: 'I1_hdPqRA_Q',
-			date: '2015-02-01T08:06:57.718Z'
-		}
-	];
-
 	var videoIdx = 0;
 
-	loadPlayer();
+	$.ajax({
+		url: "data/videos.json",
+		dataType: "json",
+		success: function(response) {
+			videos = response;
+			loadPlayer();
+		}
+		});
+		
 
 	$('#nextbutton').click(function() {
 		videoIdx++;

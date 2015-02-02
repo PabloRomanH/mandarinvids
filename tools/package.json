@@ -1,0 +1,10 @@
+{
+  "name": "mandarinvids_tools",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "echo 'No main script here.'"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
