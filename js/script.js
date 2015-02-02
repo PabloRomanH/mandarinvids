@@ -2,6 +2,11 @@ $(document).ready(function() {
 
 	var videos = [
 		{
+			source: 'iqiyi',
+			id: 'ab15fe10eeda46eb9ccb68aa85a27a03/0/0/v_19rrifmckv.swf-albumId=285098-tvId=341827-isPurchase=2-cnId=1',
+			date: '2015-02-01T08:06:57.718Z'
+		},
+		{
 			source: 'youtube',
 			id: 'r2PoBAZeWPo',
 			date: '2015-02-02T08:06:57.718Z'
@@ -13,7 +18,7 @@ $(document).ready(function() {
 		},
 		{
 			source: 'iqiyi',
-			id: 'b6d23fec3c24ae0a61dba33eb34a5202/0/0/w_19rrepgucl.swf-albumId=897022409-tvId=897022409-isPurchase=0-cnId=2',
+			id: 'b6d23fec3c24ae0a61dba33eb34a5202/0/0/w_19rrepgucl.swf-albumId=897022409-tvId=897022409-isPurchase=0-cnId=25',
 			date: '2015-02-01T08:06:57.718Z'
 		},
 		{
