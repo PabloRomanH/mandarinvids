@@ -1,7 +1,6 @@
 
 <template id="youtube-template">
-	<iframe src="http://www.youtube.com/embed/{{ id }}?rel=0&autoplay=1">
-	</iframe>
+	<iframe src="http://www.youtube.com/embed/{{ id }}?rel=0&autoplay=1"></iframe>
 </template>
 
 <template id="56-template">
@@ -21,6 +20,14 @@
 	<embed src="http://static.video.qq.com/TPout.swf?vid={{ id }}&auto=1" quality="high" allowScriptAccess="always" type="application/x-shockwave-flash" />
 </template>
 
+<template id="youku-template">
+	<embed src="http://player.youku.com/player.php/sid/{{ id }}/v.swf" flashvars="isAutoPlay=true" quality="high" allowScriptAccess="always" type="application/x-shockwave-flash" />
+</template>
+
+<template id="sina-template">
+	<embed src="http://you.video.sina.com.cn/api/sinawebApi/outplayrefer.php/video_id={{ id }}/s.swf" type="application/x-shockwave-flash" name="ssss" allowScriptAccess="always"></embed>
+</template>
+
 <template id="tudou-template">
 	<embed src="http://www.tudou.com/l/{{ id }}/&autoPlay=true/v.swf" type="application/x-shockwave-flash" allowscriptaccess="always" />
 	<!-- id is in the format: q00jq0WdlN4/&iid=221758577 -->
@@ -28,12 +35,4 @@
 
 <template id="sohu-template">
 	<embed allowscriptaccess="always" quality="high" src="http://share.vrs.sohu.com/{{ id }}/v.swf&topBar=1&autoplay=true&from=page" type="application/x-shockwave-flash" />
-</template>
-
-<template id="youku-template">
-	<embed src="http://player.youku.com/player.php/sid/{{ id }}/v.swf" flashvars="isAutoPlay=true" quality="high" allowScriptAccess="always" type="application/x-shockwave-flash" />
-</template>
-
-<template id="sina-template">
-	<embed src="http://you.video.sina.com.cn/api/sinawebApi/outplayrefer.php/video_id={{ id }}/s.swf" type="application/x-shockwave-flash" name="ssss" allowScriptAccess="always"></embed>
 </template>

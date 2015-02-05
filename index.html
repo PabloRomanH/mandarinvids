@@ -3,6 +3,12 @@
 		<title>Mandarin Vids</title>
 		<link rel="import" href="/resources.html">
 		<link rel="import" href="/embed_players/templates.html" id="templates">
+
+		<meta property="og:title" content="Ubber cool title" />
+		<meta property="og:type" content="video.movie" />
+		<meta property="og:url" content="http://www.imdb.com/title/tt0117500/" />
+		<meta property="og:image" content="http://www.babelboo.com/img/big-boo.png" />
+		<meta property="og:description" content="Some crazy description" />
 	</head>
 	<body>
 		<div class="playerband">
@@ -14,5 +20,13 @@
 	 	  	Play Next <i class="fa fa-fast-forward"></i>
 	 		</a>
  		</div>
+		<div id="fb-root"></div>
+		<script>(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) return;
+		js = d.createElement(s); js.id = id;
+		js.src = "//connect.facebook.net/ja_KS/sdk.js#xfbml=1&version=v2.0";
+		fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));</script>
 	</body>
 </html>
