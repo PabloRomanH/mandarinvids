@@ -32,7 +32,7 @@ function processCSV(err,data) {
         var d = new Date(line[0]);
         output.push({
             "source": line[1],
-            "id": line[2],
+            "_id": line[2],
             "date": d.toISOString()
         });
     }

@@ -6,6 +6,13 @@
 	margin-top: 30px;
 }
 
+#player {
+	background-color: black;
+	height: 480px;
+	width: 853px;
+	display: inline-block;
+}
+
 .buttons {
 	width: 853px;
 	padding-top: 20px;
