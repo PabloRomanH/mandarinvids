@@ -9,7 +9,6 @@ $(document).ready(function() {
 			loadPlayer();
 		}
 		});
-		
 
 	$('#nextbutton').click(function() {
 		videoIdx++;
