@@ -1,66 +1,167 @@
 $(document).ready(function() {
-	window.watcheddb = new PouchDB('watched');
-	window.soondb = new PouchDB('soon');
-	// var futuredb = new PouchDB('future');
-	// var neverdb = new PouchDB('never');
+	// PouchDB.destroy('history'); // FIXME: reset for testing
+	// PouchDB.on('destroyed', function (dbName) {
+	// 	window.watcheddb = new PouchDB('watched');
+	// 	downloadDataAndPlay();
+	// });
+	//
+	window.db = new PouchDB('history');
+	window.db.viewCleanup();
 
+	createDbViews(downloadDataAndPlay);
+});
+
+function createDbViews(callback) {
+	var skippedView = {
+		_id: '_design/skipped',
+		views: {
+			'skipped': {
+				map: function(doc) {
+					if(doc.state == 'skipped') {
+						emit(doc.date);
+					}
+				}.toString()
+			}
+		}
+	};
+
+	var soonView = {
+		_id: '_design/soon',
+		views: {
+			'soon': {
+				map: function(doc) {
+					if(doc.state == 'soon') {
+						emit(doc.date);
+					}
+				}.toString()
+			}
+		}
+	};
+
+	window.db.put(skippedView)
+		.then(function() {
+			return window.db.put(soonView);
+		})
+		.catch(function(){}) // this generates error 409 if it's not the first time, we ignore it
+		.chain(callback);
+}
+
+//
+//			 2. Move logic to the query params
+//
+//			 Don't do:
+//
+//			 function (doc) {
+//			 if (doc.highScore >= 1000) {
+//			 	emit(doc.highScore);
+//			 }
+//			 }
+//			 Instead, do:
+//
+//			 function (doc) {
+//			 emit(doc.highScore);
+//			 }
+//			 And then query with {startkey: 1000}.
+//
+// function futureView(doc) {
+// 	if(doc.state == 'future') {
+// 		emit(doc.afterTotalHours, doc.title);
+// 	}
+// }
+
+
+function downloadDataAndPlay() {
 	$.ajax({
 		url: "data/videos.json",
 		dataType: "json",
 		success: function(response) {
-			videos = response;
+			window.videos = response;
 			playNext();
 		}
 	});
-});
+}
 
 function playNext() {
 	console.log('playing next');
-	pickNext(pickedReady);
+	pickNext(donePicking);
 
-	function pickedReady(playObject) {
-		$('#skipbutton').unbind('click', nextButtonPressed);
-		$('#skipbutton').click(playObject, nextButtonPressed);
-		// $('#skipbutton').unbind('click', soonButtonPressed);
-		// $('#skipbutton').click(playObject, soonButtonPressed);
+	function donePicking(video) {
+		$('.playerbutton').unbind('click', buttonPressed);
+		$('.playerbutton').click(video, buttonPressed);
 
-		loadPlayer(playObject.video);
+		loadPlayer(video);
 	}
 }
 
-function nextButtonPressed(event) {
+function buttonPressed(event) {
 	if (event.data !== null) {
-		if (event.data.dbname == 'new') {
-			console.log('finished watching new video, adding to database');
-			console.log(event.data.video);
-			window.watcheddb.put(event.data.video, errorHandler);
-		} else if (event.data.dbname == 'soon') {
-			//removeFirst(soon);
-		} else if (event.data.dbname == 'future') {
-			//removeFirst(future);
+		var video = event.data;
+		var button = event.currentTarget.id;
+
+		if (button == 'skipbutton') {
+			video.state = 'skipped';
+		} else if (button == 'neverbutton') {
+			video.state = 'never';
+		} else if (button == 'soonbutton') {
+			video.state = 'soon';
+		} else {
+			console.log('Error: This should never happen.');
+			return;
+		}
+		video.date = (new Date()).toISOString();
+
+		window.db.put(video)
+			.catch(errorHandler('inserting skipped video to database'))
+			.chain(playNext);
+	} else {
+		playNext();
+	}
+}
+
+// this generates error 409 if it's not the first time, we ignore it
+
+function pickNext(donePicking) {
+	var pickers = [
+		probabilityRun(0.5, soonPicker),
+		newPicker,
+		skippedPicker
+	];
+
+	var i = 0;
+	console.log('choosing what to play next');
+	nextPicker();
+
+	function nextPicker() {
+		if (i >= pickers.length) {
+			donePicking(null);
+		} else {
+			pickers[i](pickerDone);
 		}
 	}
 
-	playNext();
-}
-
-function pickNext(callback) {
-	var video;
-	console.log('choosing what to play next');
-
-	pickNextNew(function(playObject) {
-		if (playObject !== null) {
-			console.log('picked a new video');
-			callback(playObject);
+	function pickerDone(video) {
+		if (video === null) {
+			i++;
+			nextPicker();
 		} else {
-			console.log('NO MORE VIDEOS FOUND!');
-			// search somewhere else
-			callback({ video: null });
+			donePicking(video);
 		}
-	});
+	}
 }
 
-function pickNextNew(callback) {
+function probabilityRun(p, f) {
+	return function (callback) {
+		if (Math.random() < p) {
+			f(callback);
+		} else {
+			callback(null); // not executed with probability 1-p
+		}
+	}
+}
+
+function newPicker(callback) {
+	var videos = window.videos;
+
 	if (typeof videos.idx === "undefined") {
 		videos.idx = 0;
 	} else {
@@ -68,22 +169,46 @@ function pickNextNew(callback) {
 	}
 
 	if (videos.idx >= videos.length) {
+		console.log('no new videos found');
 		callback(null);
 	} else {
-		window.watcheddb.get(videos[videos.idx]._id, function(err, doc) {
-			if (err) {
+		window.db.get(videos[videos.idx]._id)
+		 	.then(function(doc) {
+				console.log('skipping watched video');
+				setTimeout(newPicker, 0, callback); // prevent stack overflow
+			}).catch(function(err) {
 				if (err.status != 404) {
-					console.log('Unknown error searching in database: ' + err.status + ' ' + error.message);
+					console.log('Unknown error searching in database: ' + err.status + ' ' + err.message);
 					console.log('This shouldn\'t happen. Please contact us.');
 				}
 				console.log('found not watched video');
-				callback({ video: videos[videos.idx], dbname: 'new' });
+				callback(videos[videos.idx]);
+			});
+	}
+}
+
+function skippedPicker(callback) {
+	window.db.query('skipped', { limit: 1, include_docs: true })
+		.then(function (response) {
+			if (response.total_rows > 0) {
+				callback(response.rows[0].doc);
 			} else {
-				console.log('skipping watched video');
-				setTimeout(pickNextNew, 0, callback); // prevent stack overflow
+				console.log('no skipped videos found');
+				callback(null);
 			}
 		});
-	}
+}
+
+function soonPicker(callback) {
+	window.db.query('soon', { limit: 1, include_docs: true })
+		.then(function (response) {
+			if (response.total_rows > 0) {
+				callback(response.rows[0].doc);
+			} else {
+				console.log('no skipped videos found');
+				callback(null);
+			}
+		});
 }
 
 function loadPlayer(video) {
@@ -115,9 +240,16 @@ function loadPlayer(video) {
 	$('#player').append(clone);
 }
 
-function errorHandler(err, response) {
-	if (err) {
-		console.log('Error adding to database: ' + err.status + ' ' + error.message);
-		console.log('This shouldn\'t happen. Please contact us.');
+function errorHandler(err) {
+	var customString = null;
+	if (typeof err == 'string') {
+		customString = err;
+		return function(err) {
+			console.log('DB error ' + customString + ': ' + err.status + ' ' + err.message);
+			console.log('This shouldn\'t happen. Please contact us.');
+		}
 	}
+
+	console.log('DB error: ' + err.status + ' ' + error.message);
+	console.log('This shouldn\'t happen. Please contact us.');
 }
