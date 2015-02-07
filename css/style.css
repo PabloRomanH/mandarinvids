@@ -15,8 +15,13 @@
 
 .buttons {
 	width: 853px;
-	padding-top: 20px;
-	padding-bottom: 20px;
+	padding-top: 34px;
+	padding-bottom: 34px;
 	margin-left: auto;
 	margin-right: auto;
+	text-align: center;
+}
+
+.buttons div {
+	display: inline-block;
 }
