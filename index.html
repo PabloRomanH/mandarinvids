@@ -5,7 +5,17 @@
 		<link rel="import" href="/embed_players/templates.html" id="templates">
 	</head>
 	<body>
-		<div id="fb-root"></div>
+		<div class="pull-left">
+			<h1>Mandarinvids</h1>
+			a smart Chinese video player
+		</div>
+		<div class="pull-right">
+			<a class="btn btn-danger" href="#" id="resetbutton">
+				<i class="fa fa-bomb"></i> Reset Database
+			</a>
+		</div>
+		<div class="pull-right" id="contact"></div>
+		<div class="clearfix"></div>
 		<div class="playerband">
 	 		<div id="player">
 			</div>
@@ -25,6 +35,54 @@
 					Skip <i class="fa fa-step-forward"></i>
 				</a>
 			</div>
- 		</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4">
+					<h4>Can't watch some of the videos?</h4>
+					<ol>
+						<li>
+							Download <a target="_blank" href="https://chrome.google.com/webstore/detail/hola-better-internet/gkojfkhlekighikafcpjkiklfbnlmeio">this Chrome extension</a> or <a target="_blank" href="http://cdn4.hola.org/static/hola_firefox_ext_1.6.543_www.xpi">this Firefox extension</a>.
+						</li>
+						<li>
+							Open the source page of the video that doesn't work (click on the name in the corner of the video player)
+						</li>
+						<li>
+							Set the extension to China.
+						</li>
+						<li>
+							Reload this page.
+						</li>
+					</ol>
+				</div>
+				<div class="col-md-4">
+					<h4>Help us</h4>
+					<ol>
+						<li>Download our <a target="_blank" href="https://github.com/PabloRomanH/mandarinvids-extension">Chrome extension</a> to suggest videos</li>
+						<li>
+							Look for videos in one of the websites on the right. Here are a few keywords to get you started:
+							<ul>
+								<li>故事 (tale)</li>
+								<li>食谱 (recipe)</li>
+								<li>如何 (how to)</li>
+								<li>視障口述 (audio description)</li>
+							</ul>
+						</li>
+						<li>Click on the extension button to submit the video you are currently watching</li>
+					</ol>
+				</div>
+				<div class="col-md-4 logos">
+					<a target="_blank" href="http://www.youku.com/"><img src="/img/youku.png" /></a>
+					<a target="_blank" href="http://www.tudou.com/"><img src="/img/tudou.png" /></a>
+					<a target="_blank" href="http://www.iqiyi.com/"><img src="/img/iqiyi.png" /></a>
+					<a target="_blank" href="http://www.letv.com/"><img src="/img/letv.png" /></a>
+					<a target="_blank" href="http://v.qq.com/"><img src="/img/qq.png" /></a>
+					<a target="_blank" href="http://video.sina.com.cn/"><img src="/img/sina.png" /></a>
+					<a target="_blank" href="http://www.56.com/"><img src="/img/56.png" /></a>
+					<!-- <a target="_blank" href="http://tv.sohu.com/"><img src="/img/sohu.jpg" /></a> -->
+					<a target="_blank" href="https://www.youtube.com/?gl=TW"><img src="/img/youtube.png" /></a>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
