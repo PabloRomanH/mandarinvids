@@ -46,10 +46,10 @@ function downloadDataAndPlay() {
 }
 
 function loadPlayer(video) {
+	stopCountingTime();
 	$('#player').empty();
 
 	if(video === null) {
-		stopCountingTime();
 		return;
 	}
 
@@ -83,18 +83,14 @@ function startCountingTime() {
 }
 
 function stopCountingTime() {
-	if (!window.lastStart) {
-		return;
-	}
-
 	window.db.get('totalUserTime')
 		.then(function(doc) {
-			doc.time += (new Date() - window.lastStart) / 1000;
-			window.lastStart = null;
-			window.db.put(doc);
+			if (window.lastStart) {
+				doc.time += (new Date() - window.lastStart) / 1000;
+				window.db.put(doc);
+				window.lastStart = null;
+			}
 			window.totalUserTime = doc.time;
-
-			console.log('Watched in total: ' + secToTimeString(doc.time));
 		}).catch(function(err) {
 			if (err.status == 404) {
 				window.db.put({ _id: 'totalUserTime', time: (new Date() - window.lastStart) / 1000 });

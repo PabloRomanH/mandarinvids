@@ -61,8 +61,6 @@ function playNext() {
     }
 }
 
-var N_FUTURE_SECONDS = 50 * 60 * 60; // 50 hours
-
 function buttonPressed(event) {
     if (event.data !== null) {
         var video = event.data;
@@ -76,14 +74,11 @@ function buttonPressed(event) {
             video.state = 'soon';
         } else if (button == 'hardbutton') {
             video.state = 'future';
-            var totalTime = 0;
+            video.afterTotalSeconds = 0;
             if(window.totalUserTime) {
-                totalTime += window.totalUserTime;
+                video.afterTotalSeconds += window.totalUserTime; // save the watched time to watch video again in N hours
             }
-            if(window.lastStart) {
-                totalTime += (new Date() - window.lastStart) / 1000;
-            }
-            video.afterTotalSeconds = totalTime + N_FUTURE_SECONDS; // save the video to watch again in N hours
+            console.log('video posted with '+video.afterTotalSeconds+'s delay');
         } else {
             console.log('Error: This should never happen.');
             return;
@@ -140,19 +135,16 @@ function probabilityRun(p, f) {
     }
 }
 
-// chooses videos that have been watched and skipped
-function futurePicker(callback) {
-    var totalTime = 0;
-    if(window.totalUserTime) {
-        totalTime += window.totalUserTime;
-    }
-    if(window.lastStart) {
-        totalTime += (new Date() - window.lastStart) / 1000;
-    }
+var N_FUTURE_SECONDS = 20 * 60 * 60; // 50 hours
 
-    window.db.query('future', { limit: 1, endkey: totalTime, include_docs: true })
+// chooses videos that have been postponed because of being too difficult
+function futurePicker(callback) {
+    var totalTime = window.totalUserTime ? window.totalUserTime : 0;
+
+    window.db.query('future', { limit: 1, endkey: totalTime - N_FUTURE_SECONDS, include_docs: true })
         .then(function (response) {
             if (response.rows.length > 0) {
+                console.log('Future video picked with less than ' + (totalTime - N_FUTURE_SECONDS) + 's time');
                 callback(response.rows[0].doc);
             } else {
                 callback(null);
@@ -163,15 +155,9 @@ function futurePicker(callback) {
 
 // chooses videos that have never been watched
 function newPicker(callback) {
-    var videos = window.videos;
+    var video = nextRandomNew();
 
-    if (typeof videos.idx === "undefined") {
-        videos.idx = 0;
-    } else {
-        videos.idx++;
-    }
-
-    if (videos.idx >= videos.length) {
+    if (video == null) {
         callback(null);
     } else {
         window.db.get(videos[videos.idx]._id)
@@ -183,6 +169,26 @@ function newPicker(callback) {
                 callback(videos[videos.idx]);
             });
     }
+}
+
+function nextRandomNew() {
+    var videos = window.videos;
+
+    if (typeof videos.idx === "undefined") {
+        videos.idx = 0;
+    } else if (videos.idx >= videos.length - 1) {
+        return null;
+    } else {
+        videos.idx++;
+    }
+
+    var randomIndex = Math.floor(Math.random() * (videos.length - videos.idx) + videos.idx);
+
+    var tmpVal = videos[videos.idx];
+    videos[videos.idx] = videos[randomIndex];
+    videos[randomIndex] = tmpVal;
+
+    return videos[videos.idx]
 }
 
 // chooses videos that have been watched and skipped
