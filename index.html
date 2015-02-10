@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<title>Mandarin Vids</title>
+		<link rel="icon" type="image/png" href="/favicon.png" />
 		<link rel="import" href="/resources.html">
 		<link rel="import" href="/embed_players/templates.html" id="templates">
 	</head>
@@ -17,21 +18,25 @@
 		<div class="pull-right" id="contact"></div>
 		<div class="clearfix"></div>
 		<div class="playerband">
-	 		<div id="player">
+	 		<div id="playerdiv">
+	 			<div id="player"></div>
+				<div id="subtitleblock">
+					<a href="" id="subsblockclosebutton" class="fa fa-times text-danger"></a>
+				</div>
 			</div>
 		</div>
 		<div class="buttons">
 			<div class="btn-group" role="group">
-		 		<a class="playerbutton btn btn-danger" href="#" id="neverbutton">
+		 		<a class="playerbutton btn btn-danger" href="" id="neverbutton">
 					<i class="fa fa-trash"></i> Never again
 		 		</a>
-				<a class="playerbutton btn btn-success" href="#" id="soonbutton">
+				<a class="playerbutton btn btn-success" href="" id="soonbutton">
 					<i class="fa fa-star"></i> Play again soon
 				</a>
-				<a class="playerbutton btn btn-warning" href="#" id="hardbutton">
+				<a class="playerbutton btn btn-warning" href="" id="hardbutton">
 					<i class="fa fa-sort-amount-asc"></i> Good, but too hard for now
 				</a>
-				<a class="playerbutton btn btn-default" href="#" id="skipbutton">
+				<a class="playerbutton btn btn-default" href="" id="skipbutton">
 					Skip <i class="fa fa-step-forward"></i>
 				</a>
 			</div>
@@ -66,6 +71,7 @@
 								<li>食谱 (recipe)</li>
 								<li>如何 (how to)</li>
 								<li>視障口述 (audio description)</li>
+								<li>动画片 (cartoon)</li>
 							</ul>
 						</li>
 						<li>Click on the extension button to submit the video you are currently watching</li>
