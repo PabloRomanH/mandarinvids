@@ -3,13 +3,15 @@
 	width: 100%;
 	background-color: #333;
 	text-align: center;
+	border: 0;
 }
 
-#player {
+#playerdiv {
 	background-color: black;
 	height: 480px;
 	width: 853px;
 	display: inline-block;
+	position: relative;
 }
 
 .buttons {
@@ -51,4 +53,31 @@ h1 {
 	margin-bottom: 1px;
 	font-size: 28px;
 	display: inline-block;
+}
+
+#subtitleblock {
+	width: 953px !important;
+	height: 50px;
+	padding: 0px;
+	position: absolute;
+	top: 380px;
+	left: -50px !important;
+	z-index: 5;
+	border: 0;
+	background-color: #eee;
+	vertical-align: middle;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+#subsblockclosebutton {
+	display: none;
+	font-size: 24px;
+	width: 24px;
+}
+
+#subsblockclosebutton:hover {
+	text-decoration: none;
 }
