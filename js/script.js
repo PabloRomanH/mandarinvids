@@ -9,6 +9,8 @@ $(document).ready(function() {
 	$('#resetbutton').click(resetDB);
 
 	insertContactLink();
+
+	setupSubsBlocker();
 });
 
 function resetDB () {
@@ -24,6 +26,36 @@ function insertContactLink() {
 	var aaaa = "pabloromanh";
 	var bbbb = "gmail.com";
 	$('#contact').append('<a href="' + 'mail' + 'to:' + aaaa + '@' + bbbb + '">Contact us</a>');
+}
+
+function setupSubsBlocker() {
+	$("#subtitleblock").resizable({
+		containment: ".playerband",
+		autoHide: true,
+		handles: "ne,se,nw,sw",
+		minHeight: 50
+	});
+	$('#subsblockclosebutton').click(function(e) {
+		$("#subtitleblock").hide();
+		$('#subBlockSetting').prop('checked', false);
+		return false;
+	});
+	$('#subtitleblock').hover(
+		function(e) {
+			$("#subsblockclosebutton").show();
+			return false;
+		},
+		function(e) {
+			$("#subsblockclosebutton").hide();
+			return false;
+		});
+	$('#subBlockSetting').click(function() {
+		if (this.checked) {
+			$("#subtitleblock").css("display", "flex");
+		} else {
+			$("#subtitleblock").hide();
+		}
+	});
 }
 
 function handleVisibilityChange() {

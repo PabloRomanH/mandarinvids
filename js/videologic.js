@@ -91,6 +91,7 @@ function buttonPressed(event) {
     } else {
         playNext();
     }
+    return false; // prevents browser from scrolling back to top when pressing the button
 }
 
 function pickNext(donePicking) {
