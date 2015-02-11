@@ -14,7 +14,7 @@ $(document).ready(function() {
 });
 
 function resetDB () {
-	if(confirm("Are you sure? All your progres will be reset.")) {
+	if(confirm("Are you sure? All your progress will be reset.")) {
 		window.db.destroy(function(err, info) {
 			window.db = new PouchDB('history', { auto_compaction: true }) ;
 			createDbViews(downloadDataAndPlay);
@@ -77,10 +77,12 @@ function downloadDataAndPlay() {
 	});
 }
 
-function loadPlayer(video) {
+function unloadPlayer() {
 	stopCountingTime();
 	$('#player').empty();
+}
 
+function loadPlayer(video) {
 	if(video === null) {
 		return;
 	}
@@ -115,17 +117,20 @@ function startCountingTime() {
 }
 
 function stopCountingTime() {
+	var lastStart = window.lastStart ? window.lastStart.getTime() : null;
+	window.lastStart = null;
+
 	window.db.get('totalUserTime')
 		.then(function(doc) {
-			if (window.lastStart) {
-				doc.time += (new Date() - window.lastStart) / 1000;
+			if (lastStart) {
+				doc.time += ((new Date()).getTime() - lastStart) / 1000;
+				console.log('Watched ' + ((new Date()).getTime() - lastStart) + 'ms this time.');
 				window.db.put(doc);
-				window.lastStart = null;
 			}
 			window.totalUserTime = doc.time;
 		}).catch(function(err) {
 			if (err.status == 404) {
-				window.db.put({ _id: 'totalUserTime', time: (new Date() - window.lastStart) / 1000 });
+				window.db.put({ _id: 'totalUserTime', time: ((new Date()).getTime() - lastStart) / 1000 });
 			}
 		});
 }

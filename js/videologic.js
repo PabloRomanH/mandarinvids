@@ -62,6 +62,10 @@ function playNext() {
 }
 
 function buttonPressed(event) {
+    unloadPlayer();
+    $('.playerbutton').unbind('click', buttonPressed);
+    $('.playerbutton').click(buttonPressedDummy);
+
     if (event.data !== null) {
         var video = event.data;
         var button = event.currentTarget.id;
@@ -92,6 +96,10 @@ function buttonPressed(event) {
         playNext();
     }
     return false; // prevents browser from scrolling back to top when pressing the button
+}
+
+function buttonPressedDummy() {
+    return false;
 }
 
 function pickNext(donePicking) {
