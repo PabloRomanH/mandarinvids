@@ -89,6 +89,8 @@ function buttonPressed(event) {
         }
         video.date = (new Date()).toISOString();
 
+        video = normalizeId(video);
+
         window.db.put(video)
             .catch(errorHandler('inserting skipped video to database'))
             .chain(playNext);
@@ -100,6 +102,20 @@ function buttonPressed(event) {
 
 function buttonPressedDummy() {
     return false;
+}
+
+function normalizeId(video) {
+    if (video._id[0] == '_') {
+        video._id = '*' + video._id;
+    }
+    return video;
+}
+
+function denormalizeId(video) {
+    if (video._id[0] == '*') {
+        video._id = video._id.substring(1);
+    }
+    return video;
 }
 
 function pickNext(donePicking) {
@@ -129,7 +145,7 @@ function pickNext(donePicking) {
             i++;
             nextPicker();
         } else {
-            donePicking(video);
+            donePicking(denormalizeId(video));
         }
     }
 }
@@ -169,13 +185,13 @@ function newPicker(callback) {
     if (video == null) {
         callback(null);
     } else {
-        window.db.get(videos[videos.idx]._id)
+        window.db.get(video._id)
              .then(function(doc) {
                 setTimeout(newPicker, 0, callback); // prevent stack overflow
             }).catch(function(err) {
                 if (err.status != 404) {
                 }
-                callback(videos[videos.idx]);
+                callback(video);
             });
     }
 }
@@ -197,7 +213,7 @@ function nextRandomNew() {
     videos[videos.idx] = videos[randomIndex];
     videos[randomIndex] = tmpVal;
 
-    return videos[videos.idx]
+    return normalizeId(videos[videos.idx]);
 }
 
 // chooses videos that have been watched and skipped
