@@ -69,7 +69,7 @@ function handleVisibilityChange() {
 
 function downloadDataAndPlay() {
 	$.ajax({
-		url: "data/videos.json",
+		url: "/data/videos.json",
 		dataType: "json",
 		success: function(response) {
 			window.videos = response;
