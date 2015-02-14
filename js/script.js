@@ -68,7 +68,7 @@ function handleVisibilityChange() {
 }
 
 function downloadDataAndPlay() {
-	var match = /\/([^\/]+)\/(.+)/.exec(window.location);
+	var match = /\/([^\/]+)\/(.+)/.exec(parent.location);
 	var video = null;
 	if (match != null) {
 		video = {
@@ -76,7 +76,6 @@ function downloadDataAndPlay() {
 			_id: match[2]
 		};
 	}
-
 
 	$.ajax({
 		url: "/data/videos.json",
