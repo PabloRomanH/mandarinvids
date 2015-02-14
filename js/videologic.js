@@ -50,8 +50,12 @@ function createDbViews(callback) {
         .chain(callback);
 }
 
-function playNext() {
-    pickNext(donePicking);
+function playNext(video) {
+    if (video) {
+        pickThis(video, donePicking);
+    } else {
+        pickNext(donePicking);
+    }
 
     function donePicking(video) {
         $('.playerbutton').unbind('click', buttonPressed);
@@ -95,7 +99,9 @@ function buttonPressed(event) {
 
         window.db.put(video)
             .catch(errorHandler('inserting skipped video to database'))
-            .chain(playNext);
+            .chain(function() {
+                playNext();
+            });
     } else {
         playNext();
     }
@@ -118,6 +124,18 @@ function denormalizeId(video) {
         video._id = video._id.substring(1);
     }
     return video;
+}
+
+function pickThis(video, callback) {
+    window.db.get(normalizeId(video)._id)
+        .then(function(doc) {
+            callback(denormalizeId(doc));
+        })
+        .catch(function(err) {
+            if (err.status != 404) {
+            }
+            callback(denormalizeId(video));
+        });
 }
 
 function pickNext(donePicking) {

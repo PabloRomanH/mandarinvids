@@ -68,12 +68,24 @@ function handleVisibilityChange() {
 }
 
 function downloadDataAndPlay() {
+	var match = /\/([^\/]+)\/(.+)/.exec(window.location);
+	var video = null;
+	if (match != null) {
+		video = {
+			source: match[1],
+			_id: match[2]
+		};
+	}
+
+
 	$.ajax({
 		url: "/data/videos.json",
 		dataType: "json",
 		success: function(response) {
 			window.videos = response;
-			playNext(loadPlayer);
+		},
+		complete: function() {
+			playNext(video);
 		}
 	});
 }
