@@ -8,6 +8,10 @@ $(document).ready(function() {
 	$(document).on('visibilitychange', handleVisibilityChange);
 	$('#resetbutton').click(resetDB);
 
+	$(window).on("popstate", function() {
+		location.reload();
+	});
+
 	insertContactLink();
 
 	setupSubsBlocker();
