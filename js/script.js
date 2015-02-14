@@ -8,7 +8,7 @@ $(document).ready(function() {
 	$(document).on('visibilitychange', handleVisibilityChange);
 	$('#resetbutton').click(resetDB);
 
-	$(window).on("popstate", function() {
+	$(parent).on("popstate", function() {
 		location.reload();
 	});
 

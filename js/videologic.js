@@ -61,7 +61,7 @@ function playNext(video) {
         $('.playerbutton').unbind('click', buttonPressed);
         $('.playerbutton').click(video, buttonPressed);
 
-        history.pushState('data', '', '/' + video.source + '/' + video._id);
+        parent.history.pushState('data', '', '/' + video.source + '/' + video._id);
 
         loadPlayer(video);
     }
