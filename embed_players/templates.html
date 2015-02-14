@@ -33,6 +33,10 @@
 	<!-- id is in the format: q00jq0WdlN4/&iid=221758577 -->
 </template>
 
+<template id="mysohu-template">
+	<embed allowscriptaccess="always" quality="high" src="http://share.vrs.sohu.com/my/v.swf&topBar=1&id={{ id }}&autoplay=true&from=page" type="application/x-shockwave-flash" />
+</template>
+
 <template id="sohu-template">
-	<embed allowscriptaccess="always" quality="high" src="http://share.vrs.sohu.com/{{ id }}/v.swf&topBar=1&autoplay=true&from=page" type="application/x-shockwave-flash" />
+	<embed allowscriptaccess="always" quality="high" src="http://share.vrs.sohu.com/{{ id }}&topBar=1&autoplay=false&pub_catecode=0&from=page" type="application/x-shockwave-flash" />
 </template>

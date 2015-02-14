@@ -15,6 +15,7 @@ $(document).ready(function() {
 
 function resetDB () {
 	if(confirm("Are you sure? All your progress will be reset.")) {
+		unloadPlayer();
 		window.db.destroy(function(err, info) {
 			window.db = new PouchDB('history', { auto_compaction: true }) ;
 			createDbViews(downloadDataAndPlay);
