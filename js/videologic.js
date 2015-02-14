@@ -57,6 +57,8 @@ function playNext() {
         $('.playerbutton').unbind('click', buttonPressed);
         $('.playerbutton').click(video, buttonPressed);
 
+        history.pushState('data', '', '/' + video.source + '/' + video._id);
+
         loadPlayer(video);
     }
 }
