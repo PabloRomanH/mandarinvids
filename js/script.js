@@ -9,7 +9,14 @@ $(document).ready(function() {
 	$('#resetbutton').click(resetDB);
 
 	$(parent).on("popstate", function() {
-		location.reload();
+		unloadPlayer();
+		var match = /\/([^\/]+)\/(.+)/.exec(parent.location.pathname);
+		var video = {
+			source: match[1],
+			_id: match[2]
+		};
+
+		playNext(video);
 	});
 
 	insertContactLink();

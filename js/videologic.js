@@ -50,9 +50,9 @@ function createDbViews(callback) {
         .chain(callback);
 }
 
-function playNext(video) {
-    if (video) {
-        pickThis(video, donePicking);
+function playNext(firstVideo) {
+    if (firstVideo) {
+        pickThis(firstVideo, donePicking);
     } else {
         pickNext(donePicking);
     }
@@ -61,7 +61,9 @@ function playNext(video) {
         $('.playerbutton').unbind('click', buttonPressed);
         $('.playerbutton').click(video, buttonPressed);
 
-        parent.history.pushState('data', '', '/' + video.source + '/' + video._id);
+        if (!firstVideo) {
+            parent.history.pushState('data', '', '/' + video.source + '/' + video._id);
+        }
 
         loadPlayer(video);
     }
