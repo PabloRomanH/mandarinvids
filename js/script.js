@@ -68,7 +68,7 @@ function handleVisibilityChange() {
 }
 
 function downloadDataAndPlay() {
-	var match = /\/([^\/]+)\/(.+)/.exec(parent.location);
+	var match = /\/([^\/]+)\/(.+)/.exec(parent.location.pathname);
 	var video = null;
 	if (match != null) {
 		video = {
