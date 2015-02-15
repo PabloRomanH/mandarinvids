@@ -1,11 +1,6 @@
 [
     {
         "source": "youku",
-        "_id": "XMzE0NDQxNTg4",
-        "date": "2015-02-09T22:17:48.000Z"
-    },
-    {
-        "source": "youku",
         "_id": "XMzE0NDcyMjM2",
         "date": "2015-02-09T22:28:16.000Z"
     },
@@ -18,11 +13,6 @@
         "source": "youku",
         "_id": "XMzE0NDczMDQ4",
         "date": "2015-02-09T22:29:20.000Z"
-    },
-    {
-        "source": "youku",
-        "_id": "XMzE0NDczNDAw",
-        "date": "2015-02-09T22:29:53.000Z"
     },
     {
         "source": "youku",
@@ -58,16 +48,6 @@
         "source": "youku",
         "_id": "XMzE0NDc4NjUy",
         "date": "2015-02-09T22:36:00.000Z"
-    },
-    {
-        "source": "youku",
-        "_id": "XMzE0NDc5NDE2",
-        "date": "2015-02-09T22:36:22.000Z"
-    },
-    {
-        "source": "youtube",
-        "_id": "h1xxT84xSis",
-        "date": "2015-02-09T22:40:25.000Z"
     },
     {
         "source": "qq",
