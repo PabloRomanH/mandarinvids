@@ -125,7 +125,7 @@ function loadPlayer(video) {
 
 	clone.children().attr('src', url);
 	clone.children().attr('width', 853);
-	clone.children().attr('height', 480);
+	clone.children().attr('height', 510);
 	clone.children().attr('frameborder', 0);
 	clone.children().attr('allowfullscreen', true);
 
