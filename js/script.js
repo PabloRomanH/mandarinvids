@@ -3,50 +3,26 @@ $(document).ready(function() {
 	window.db = new PouchDB('history', { auto_compaction: true });
 	window.db.viewCleanup();
 
-	xxx();
-	// createDbViews(downloadDataAndPlay);
-	//
-	// $(document).on('visibilitychange', handleVisibilityChange);
-	// $('#resetbutton').click(resetDB);
-	//
-	// $(parent).on("popstate", function() {
-	// 	unloadPlayer();
-	// 	var match = /\/([^\/]+)\/(.+)/.exec(parent.location.pathname);
-	// 	var video = {
-	// 		source: match[1],
-	// 		_id: match[2]
-	// 	};
-	//
-	// 	playNext(video);
-	// });
-	//
-	// insertContactLink();
-	//
-	// setupSubsBlocker();
-});
+	createDbViews(downloadDataAndPlay);
 
-function xxx() {
-	console.log('xxxx');
-	window.db.query('soon', { include_docs: true })
-		.then(function (response) {
-			console.log('shuffling ' + response.rows.length + 'videos');
-			console.log(response);
-			if (response.rows.length > 0) {
-				for(var i = 0; i < response.rows.length; i++) {
-					var randDate = new Date();
-					randDate.setMinutes(-Math.random()*15*24*60);
-					response.rows[i].doc.date = randDate;
-					console.log(response.rows[i].doc);
-					window.db.put(response.rows[i].doc)
-						.then(function() {
-							console.log('inserted video');
-						})
-						.catch(errorHandler('inserting skipped video to database'));
-				}
-			}
-		//	downloadDataAndPlay();
-		});
-}
+	$(document).on('visibilitychange', handleVisibilityChange);
+	$('#resetbutton').click(resetDB);
+
+	$(parent).on("popstate", function() {
+		unloadPlayer();
+		var match = /\/([^\/]+)\/(.+)/.exec(parent.location.pathname);
+		var video = {
+			source: match[1],
+			_id: match[2]
+		};
+
+		playNext(video);
+	});
+
+	insertContactLink();
+
+	setupSubsBlocker();
+});
 
 function resetDB () {
 	if(confirm("Are you sure? All your progress will be reset.")) {
