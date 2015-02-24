@@ -69,13 +69,14 @@ function allDone(err, results) {
     function addToJSON(err, data) {
         var oldarr = JSON.parse(data.toString());
 
-        var outarr = flatten(results).concat(oldarr);
+        var flatresults = flatten(results);
+        var outarr = flatresults.concat(oldarr);
 
         fs.writeFile(outputFilePath, JSON.stringify(outarr, null, 4), function (err) {
             if (err) {
                 throw err;
             }
-            console.log(outarr.length + ' entries correctly added to data/videos.json');
+            console.log(flatresults.length + ' entries correctly added to data/videos.json');
         });
     }
 }
