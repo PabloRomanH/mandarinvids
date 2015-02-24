@@ -147,7 +147,6 @@ function stopCountingTime() {
 		.then(function(doc) {
 			if (lastStart) {
 				doc.time += ((new Date()).getTime() - lastStart) / 1000;
-				console.log('Watched ' + ((new Date()).getTime() - lastStart) + 'ms this time.');
 				window.db.put(doc);
 			}
 			window.totalUserTime = doc.time;

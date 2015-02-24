@@ -8,7 +8,8 @@ function createDbViews(callback) {
                     if(doc.state == 'skipped') {
                         emit(doc.date);
                     }
-                }.toString()
+                }.toString(),
+                reduce: '_count'
             }
         }
     };
@@ -21,7 +22,8 @@ function createDbViews(callback) {
                     if(doc.state == 'soon') {
                         emit(doc.date);
                     }
-                }.toString()
+                }.toString(),
+                reduce: '_count'
             }
         }
     };
@@ -39,14 +41,38 @@ function createDbViews(callback) {
         }
     };
 
-    window.db.put(skippedView)
-        .then(function() {
-            return window.db.put(soonView);
+    window.db.get('_design/skipped')
+        .then(function(doc) {
+            if(!doc.views.skipped.reduce) {
+                doc.views.skipped.reduce = '_count';
+                return window.db.put(doc);
+            }
         })
-        .then(function() {
+        .catch(function(err) {
+            if (err.status == 404) {
+                return window.db.put(skippedView);
+            }
+        })
+        .catch(function(err){})
+        .chain(function() {
+            return window.db.get('_design/soon');
+        })
+        .then(function(doc) {
+            if(!doc.views.soon.reduce) {
+                doc.views.soon.reduce = '_count';
+                return window.db.put(doc);
+            }
+        })
+        .catch(function(err) {
+            if (err.status == 404) {
+                return window.db.put(soonView);
+            }
+        })
+        .catch(function(err){})
+        .chain(function() {
             return window.db.put(futureView);
         })
-        .catch(function(){}) // this generates error 409 if it's not the first time, we ignore it
+        .catch(function(err){}) // this generates error 409 if it's not the first time, we ignore it
         .chain(callback);
 }
 
@@ -140,19 +166,68 @@ function pickThis(video, callback) {
         });
 }
 
+function getNumSoonSkipped(callback) {
+    var numSoon = 0;
+    var numSkipped = 0;
+
+    window.db.query('soon', { reduce: true })
+        .then(function (response) {
+            if(response.rows.length) {
+                numSoon = response.rows[0].value;
+            }
+
+            return window.db.query('skipped', { reduce: true });
+        })
+        .then(function (response) {
+            if(response.rows.length) {
+                numSkipped = response.rows[0].value;
+            }
+
+            callback(numSoon, numSkipped);
+        });
+}
+
 function pickNext(donePicking) {
-    // list of ordered criteria to choose next video to play
-    var pickers = [
-        futurePicker,
-        probabilityRun(0.1, soonPicker),
-        newPicker,
-        probabilityRun(0.5, skippedPicker),
-        soonPicker
-    ];
+    var START_PROBABILITY_NUMSOON = 10;
+    var MAX_PROBABILITY_NUMSOON = 40;
+    var MAX_PROBABILITY_SOON = 0.5;
+    var SKIPPED_SOON_RATIO = 0.3;
 
     var i = 0;
 
-    nextPicker();
+    var pickers;
+
+    getNumSoonSkipped(function (numSoon, numSkipped)
+        {
+            var soonProbability;
+
+            if(numSoon > START_PROBABILITY_NUMSOON)
+                soonProbability = (numSoon - START_PROBABILITY_NUMSOON) / MAX_PROBABILITY_NUMSOON * MAX_PROBABILITY_SOON;
+            else
+                soonProbability = 0;
+
+            if (soonProbability > MAX_PROBABILITY_SOON) soonProbability = MAX_PROBABILITY_SOON;
+
+            var equivalentProbability;
+
+            if (numSoon > 0)
+                equivalentProbability = soonProbability / numSoon * numSkipped;
+            else
+                equivalentProbability = 0;
+
+            var skippedProbability = equivalentProbability * SKIPPED_SOON_RATIO;
+
+            // list of ordered criteria to choose next video to play
+            pickers = [
+                futurePicker,
+                probabilityRun(soonProbability, soonPicker),
+                newPicker,
+                probabilityRun(skippedProbability, skippedPicker),
+                soonPicker
+            ];
+
+            nextPicker();
+        });
 
     function nextPicker() {
         if (i >= pickers.length) {
@@ -240,7 +315,7 @@ function nextRandomNew() {
 
 // chooses videos that have been watched and skipped
 function skippedPicker(callback) {
-    window.db.query('skipped', { limit: 1, include_docs: true })
+    window.db.query('skipped', { limit: 1, include_docs: true, reduce: false })
         .then(function (response) {
             if (response && response.rows.length > 0) {
                 callback(response.rows[0].doc);
@@ -252,7 +327,7 @@ function skippedPicker(callback) {
 
 // chooses videos that have been chosen by the user to play soon
 function soonPicker(callback) {
-    window.db.query('soon', { limit: 1, include_docs: true })
+    window.db.query('soon', { limit: 1, include_docs: true, reduce: false })
         .then(function (response) {
             if (response.rows.length > 0) {
                 callback(response.rows[0].doc);
