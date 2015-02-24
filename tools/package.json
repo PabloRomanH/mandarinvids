@@ -5,6 +5,10 @@
   "scripts": {
     "start": "echo 'No main script here.'"
   },
-  "dependencies": {},
+  "dependencies": {
+    "async": "^0.9.0",
+    "flatten": "0.0.1",
+    "googleapis": "^1.1.3"
+  },
   "devDependencies": {}
 }
