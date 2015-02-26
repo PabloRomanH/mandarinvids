@@ -3,6 +3,7 @@ $(document).ready(function() {
 	window.db = new PouchDB('history', { auto_compaction: true });
 	window.db.viewCleanup();
 
+	initUser();
 	createDbViews(downloadDataAndPlay);
 
 	$(document).on('visibilitychange', handleVisibilityChange);
@@ -23,6 +24,13 @@ $(document).ready(function() {
 
 	setupSubsBlocker();
 });
+
+function initUser() {
+	window.db.get('totalUserTime')
+		.then(function(doc) {
+			window.totalUserTime = doc.time;
+		});
+}
 
 function resetDB () {
 	if(confirm("Are you sure? All your progress will be reset.")) {
