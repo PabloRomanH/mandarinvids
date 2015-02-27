@@ -91,6 +91,7 @@ function playNext(firstVideo) {
             parent.history.pushState('data', '', '/' + video.source + '/' + video._id);
         }
 
+        applySubsState(video);
         loadPlayer(video);
     }
 }
@@ -122,6 +123,7 @@ function buttonPressed(event) {
             return;
         }
         video.date = (new Date()).toISOString();
+        video = includeSubsState(video);
 
         video = normalizeId(video);
 
@@ -134,6 +136,35 @@ function buttonPressed(event) {
         playNext();
     }
     return false; // prevents browser from scrolling back to top when pressing the button
+}
+
+var PLAYER_CONTROLS_HEIGHT = 30;
+
+function includeSubsState(video) {
+    if($('#subtitleblock').is(':visible')) {
+        video.subsVisible = true;
+        video.subsTop = window.subsTop / (PLAYER_HEIGHT - PLAYER_CONTROLS_HEIGHT);
+        video.subsHeight = window.subsHeight / (PLAYER_HEIGHT - PLAYER_CONTROLS_HEIGHT);
+    } else {
+        video.subsVisible = false;
+        video.subsTop = undefined;
+        video.subsHeight = undefined;
+    }
+
+    return video;
+}
+
+function applySubsState(video) {
+    if(video.subsVisible) {
+        window.subsTop = video.subsTop * (PLAYER_HEIGHT - PLAYER_CONTROLS_HEIGHT);
+        window.subsHeight = video.subsHeight * (PLAYER_HEIGHT - PLAYER_CONTROLS_HEIGHT);
+
+        $('#subtitleblock').show();
+        $('#subtitleblock').css('top', window.subsTop);
+        $('#subtitleblock').css('height', window.subsHeight);
+    } else if (video.subsVisible == false) {
+        $('#subtitleblock').hide();
+    }
 }
 
 function buttonPressedDummy() {
@@ -216,6 +247,10 @@ function pickNext(donePicking) {
                 equivalentProbability = 0;
 
             var skippedProbability = equivalentProbability * SKIPPED_SOON_RATIO;
+
+            //////////////
+            soonProbability = 0.5;
+            ///////////////
 
             // list of ordered criteria to choose next video to play
             pickers = [

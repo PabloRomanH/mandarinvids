@@ -53,8 +53,13 @@ function setupSubsBlocker() {
 		containment: ".playerband",
 		autoHide: true,
 		handles: "ne,se,nw,sw",
-		minHeight: 50
+		minHeight: 50,
+		resize: function(event, ui) {
+			window.subsTop = ui.position.top;
+			window.subsHeight = ui.size.height;
+		}
 	});
+
 	$('#subsblockclosebutton').click(function(e) {
 		$("#subtitleblock").hide();
 		$('#subBlockSetting').prop('checked', false);
@@ -113,6 +118,9 @@ function unloadPlayer() {
 	$('#player').empty();
 }
 
+window.PLAYER_WIDTH = 853;
+window.PLAYER_HEIGHT = 510;
+
 function loadPlayer(video) {
 	if(video === null) {
 		return;
@@ -132,8 +140,8 @@ function loadPlayer(video) {
 	url = url.replace('{{ id }}', video._id);
 
 	clone.children().attr('src', url);
-	clone.children().attr('width', 853);
-	clone.children().attr('height', 510);
+	clone.children().attr('width', PLAYER_WIDTH);
+	clone.children().attr('height', PLAYER_HEIGHT);
 	clone.children().attr('frameborder', 0);
 	clone.children().attr('allowfullscreen', true);
 
