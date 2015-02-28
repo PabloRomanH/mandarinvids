@@ -11,26 +11,34 @@
 			<h1>Mandarinvids</h1>
 			a smart Chinese video player
 		</div>
-		<div class="pull-right">
+		<!-- <div class="pull-right">
 			<a class="btn btn-danger" href="#" id="resetbutton">
 				<i class="fa fa-bomb"></i> Reset Progress
 			</a>
-		</div>
+		</div> -->
 		<div class="pull-right">
 			<div class="btn-group">
 				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-					Settings <span class="caret"></span>
+					Tools <span class="caret"></span>
 				</button>
-				<ul class="dropdown-menu" role="menu">
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" id="subBlockSetting">
-							Subtitle block
-						</label>
-					</div>
-					<!-- <li><a href="#">Another action</a></li> -->
-					<!-- <li class="divider"></li> -->
-					<!-- <li><a href="#">Separated link</a></li> -->
+				<ul class="dropdown-menu dropdown-menu-right" role="menu">
+					<li>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" id="subBlockSetting"> Subtitle block
+							</label>
+						</div>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<span id="watched-time">Watched: 0:00</span>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<a href="#" id="resetbutton">
+							<i class="fa fa-bomb"></i> Reset Progress
+						</a>
+					</li>
 				</ul>
 			</div>
 		</div>

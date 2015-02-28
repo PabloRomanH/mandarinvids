@@ -25,10 +25,19 @@ $(document).ready(function() {
 	setupSubsBlocker();
 });
 
+function showWatchedTime(seconds) {
+	$('#watched-time').empty();
+	var h = Math.floor(seconds / 60 / 60);
+	var m = Math.floor(seconds % (60 * 60) / 60);
+	m = m < 10 ? "0" + m : m;
+	$('#watched-time').append('Watched: ' + h + ':' + m);
+}
+
 function initUser() {
 	window.db.get('totalUserTime')
 		.then(function(doc) {
 			window.totalUserTime = doc.time;
+			showWatchedTime(doc.time);
 		});
 }
 
@@ -166,6 +175,7 @@ function stopCountingTime() {
 				window.db.put(doc);
 			}
 			window.totalUserTime = doc.time;
+			showWatchedTime(doc.time);
 		}).catch(function(err) {
 			if (err.status == 404) {
 				window.db.put({ _id: 'totalUserTime', time: ((new Date()).getTime() - lastStart) / 1000 });
