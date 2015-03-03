@@ -248,10 +248,6 @@ function pickNext(donePicking) {
 
             var skippedProbability = equivalentProbability * SKIPPED_SOON_RATIO;
 
-            //////////////
-            soonProbability = 0.5;
-            ///////////////
-
             // list of ordered criteria to choose next video to play
             pickers = [
                 futurePicker,
