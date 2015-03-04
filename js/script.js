@@ -38,6 +38,10 @@ function initUser() {
 		.then(function(doc) {
 			window.totalUserTime = doc.time;
 			showWatchedTime(doc.time);
+		})
+		.catch(function(err) {
+			window.totalUserTime = 0;
+			showWatchedTime(0);
 		});
 }
 

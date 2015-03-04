@@ -28,6 +28,20 @@ function createDbViews(callback) {
         }
     };
 
+    var verySoonView = {
+        _id: '_design/verysoon',
+        views: {
+            'verysoon': {
+                map: function(doc) {
+                    if(doc.state == 'verysoon') {
+                        emit(doc.date);
+                    }
+                }.toString(),
+                reduce: '_count'
+            }
+        }
+    };
+
     var futureView = {
         _id: '_design/future',
         views: {
@@ -73,6 +87,10 @@ function createDbViews(callback) {
             return window.db.put(futureView);
         })
         .catch(function(err){}) // this generates error 409 if it's not the first time, we ignore it
+        .chain(function() {
+            return window.db.put(verySoonView);
+        })
+        .catch(function(err){}) // this generates error 409 if it's not the first time, we ignore it
         .chain(callback);
 }
 
@@ -105,12 +123,12 @@ function buttonPressed(event) {
         var video = event.data;
         var button = event.currentTarget.id;
 
-        if (button == 'skipbutton') {
-            video.state = 'skipped';
-        } else if (button == 'neverbutton') {
-            video.state = 'never';
+        if (button == 'verysoonbutton') {
+            video.state = 'verysoon';
         } else if (button == 'soonbutton') {
             video.state = 'soon';
+        } else if (button == 'skipbutton') {
+            video.state = 'skipped';
         } else if (button == 'hardbutton') {
             video.state = 'future';
             video.afterTotalSeconds = 0;
@@ -118,6 +136,8 @@ function buttonPressed(event) {
                 video.afterTotalSeconds += window.totalUserTime; // save the watched time to watch video again in N hours
             }
             console.log('video posted with '+video.afterTotalSeconds+'s delay');
+        } else if (button == 'neverbutton') {
+            video.state = 'never';
         } else {
             console.log('Error: This should never happen.');
             return;
@@ -197,9 +217,10 @@ function pickThis(video, callback) {
         });
 }
 
-function getNumSoonSkipped(callback) {
+function getNumVideos(callback) {
     var numSoon = 0;
     var numSkipped = 0;
+    var numVerySoon = 0;
 
     window.db.query('soon', { reduce: true })
         .then(function (response) {
@@ -214,46 +235,55 @@ function getNumSoonSkipped(callback) {
                 numSkipped = response.rows[0].value;
             }
 
-            callback(numSoon, numSkipped);
+            return window.db.query('verysoon', { reduce: true });
+        })
+        .then(function (response) {
+            if(response.rows.length) {
+                numVerySoon = response.rows[0].value;
+            }
+
+            callback(numVerySoon, numSoon, numSkipped);
         });
 }
 
 function pickNext(donePicking) {
-    var START_PROBABILITY_NUMSOON = 10;
-    var MAX_PROBABILITY_NUMSOON = 40;
-    var MAX_PROBABILITY_SOON = 0.5;
-    var SKIPPED_SOON_RATIO = 0.3;
+    var MINIMUM_WATCHED_BEFORE_REPEATING = 10;
+    var WATCHED_MAX_REPEAT_PROBABILITY = 50;
+    var MAX_PROBABILITY_WATCHED = 0.9;
+    var VERYSOON_SOON_FACTOR = 3;
+    var SOON_SKIPPED_FACTOR = 3;
 
     var i = 0;
 
     var pickers;
 
-    getNumSoonSkipped(function (numSoon, numSkipped)
+    getNumVideos(function (numVerySoon, numSoon, numSkipped)
         {
-            var soonProbability;
+            var totalWatched = numVerySoon + numSoon + numSkipped;
+            totalWatched -= MINIMUM_WATCHED_BEFORE_REPEATING;
+            if (totalWatched < 0) totalWatched = 0;
+            if (totalWatched > WATCHED_MAX_REPEAT_PROBABILITY) totalWatched = WATCHED_MAX_REPEAT_PROBABILITY;
 
-            if(numSoon > START_PROBABILITY_NUMSOON)
-                soonProbability = (numSoon - START_PROBABILITY_NUMSOON) / MAX_PROBABILITY_NUMSOON * MAX_PROBABILITY_SOON;
-            else
-                soonProbability = 0;
+            var newProbability = 1 - totalWatched / WATCHED_MAX_REPEAT_PROBABILITY * MAX_PROBABILITY_WATCHED;
 
-            if (soonProbability > MAX_PROBABILITY_SOON) soonProbability = MAX_PROBABILITY_SOON;
+            var verysoonProbability = VERYSOON_SOON_FACTOR * SOON_SKIPPED_FACTOR * numVerySoon;
+            var soonProbability = SOON_SKIPPED_FACTOR * numSoon;
 
-            var equivalentProbability;
+            var totalProbability = verysoonProbability + soonProbability + numSkipped;
 
-            if (numSoon > 0)
-                equivalentProbability = soonProbability / numSoon * numSkipped;
-            else
-                equivalentProbability = 0;
+            verysoonProbability /= totalProbability;
 
-            var skippedProbability = equivalentProbability * SKIPPED_SOON_RATIO;
+            soonProbability /= soonProbability + numSkipped;
 
             // list of ordered criteria to choose next video to play
             pickers = [
                 futurePicker,
+                probabilityRun(newProbability, newPicker),
+                probabilityRun(verysoonProbability, verySoonPicker),
                 probabilityRun(soonProbability, soonPicker),
+                skippedPicker,
                 newPicker,
-                probabilityRun(skippedProbability, skippedPicker),
+                verySoonPicker,
                 soonPicker
             ];
 
@@ -346,19 +376,22 @@ function nextRandomNew() {
 
 // chooses videos that have been watched and skipped
 function skippedPicker(callback) {
-    window.db.query('skipped', { limit: 1, include_docs: true, reduce: false })
-        .then(function (response) {
-            if (response && response.rows.length > 0) {
-                callback(response.rows[0].doc);
-            } else {
-                callback(null);
-            }
-        });
+    pickFirst('skipped', callback);
 }
 
 // chooses videos that have been chosen by the user to play soon
 function soonPicker(callback) {
-    window.db.query('soon', { limit: 1, include_docs: true, reduce: false })
+    pickFirst('soon', callback);
+}
+
+// chooses videos that have been chosen by the user to play very soon
+function verySoonPicker(callback) {
+    pickFirst('verysoon', callback);
+}
+
+// chooses videos that have been chosen by the user to play very soon
+function pickFirst(view, callback) {
+    window.db.query(view, { limit: 1, include_docs: true, reduce: false })
         .then(function (response) {
             if (response.rows.length > 0) {
                 callback(response.rows[0].doc);
