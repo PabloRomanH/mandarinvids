@@ -26,16 +26,14 @@ $(document).ready(function() {
 	});
 });
 
+// temporary code to fix entries using old time specification (submitted time instead of play-again time)
 function updateFuture()
 {
 	window.db.query('future', { include_docs: true })
 		.then(function (response) {
 			for(var i = 0; i < response.rows.length; i++) {
-				console.log('from ' + response.rows[i].doc.afterTotalSeconds);
-				console.log('compared to ' + window.totalUserTime);
 				if(response.rows[i].doc.afterTotalSeconds < window.totalUserTime) {
 					response.rows[i].doc.afterTotalSeconds += 20 * 60 * 60;
-					console.log('to ' + response.rows[i].doc.afterTotalSeconds);
 					window.db.put(response.rows[i].doc);
 				}
 			}
