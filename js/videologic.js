@@ -135,8 +135,7 @@ function buttonPressed(event) {
             video.state = 'skipped';
         } else if (button == '20hours') {
             video.state = 'future';
-            // video.afterTotalSeconds = 20 * 60 * 60;
-            video.afterTotalSeconds = 0;
+            video.afterTotalSeconds = 20 * 60 * 60;
             if(window.totalUserTime) {
                 video.afterTotalSeconds += window.totalUserTime; // save the watched time to watch video again in N hours
             }
