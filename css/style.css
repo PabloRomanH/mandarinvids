@@ -21,16 +21,24 @@
 	text-align: right;
 }
 
-.btn-group {
+.buttons > .btn-group {
 	width: 100%;
 	text-align: center;
+}
+
+.btn-group > div {
+	width: 20%;
+}
+
+.buttons button {
+	width: 100%;
 }
 
 .buttons div {
 	display: inline-block;
 }
 
-.buttons a {
+.buttons > div > a {
 	display: inline-block;
 	width: 20%;
 }

@@ -102,8 +102,11 @@ function playNext(firstVideo) {
     }
 
     function donePicking(video) {
-        $('.playerbutton').unbind('click', buttonPressed);
+        $('.playerbutton').unbind('click');
         $('.playerbutton').click(video, buttonPressed);
+        $(".dropdown-menu .playerbutton").click(function() {
+            $(this).closest(".dropdown-menu").prev().dropdown("toggle");
+        });
 
         if (!firstVideo) {
             parent.history.pushState('data', '', '/' + video.source + '/' + video._id);
@@ -121,6 +124,7 @@ function buttonPressed(event) {
 
     if (event.data !== null) {
         var video = event.data;
+        console.log(video._id);
         var button = event.currentTarget.id;
 
         if (button == 'verysoonbutton') {
@@ -129,13 +133,26 @@ function buttonPressed(event) {
             video.state = 'soon';
         } else if (button == 'skipbutton') {
             video.state = 'skipped';
-        } else if (button == 'hardbutton') {
+        } else if (button == '20hours') {
             video.state = 'future';
+            // video.afterTotalSeconds = 20 * 60 * 60;
             video.afterTotalSeconds = 0;
             if(window.totalUserTime) {
                 video.afterTotalSeconds += window.totalUserTime; // save the watched time to watch video again in N hours
             }
-            console.log('video posted with '+video.afterTotalSeconds+'s delay');
+            console.log('afterTotalSeconds: ' + video.afterTotalSeconds);
+        } else if (button == '50hours') {
+            video.state = 'future';
+            video.afterTotalSeconds = 50 * 60 * 60;
+            if(window.totalUserTime) {
+                video.afterTotalSeconds += window.totalUserTime; // save the watched time to watch video again in N hours
+            }
+        } else if (button == '100hours') {
+            video.state = 'future';
+            video.afterTotalSeconds = 100 * 60 * 60;
+            if(window.totalUserTime) {
+                video.afterTotalSeconds += window.totalUserTime; // save the watched time to watch video again in N hours
+            }
         } else if (button == 'neverbutton') {
             video.state = 'never';
         } else {
@@ -318,16 +335,13 @@ function probabilityRun(p, f) {
     }
 }
 
-var N_FUTURE_SECONDS = 20 * 60 * 60; // 50 hours
-
 // chooses videos that have been postponed because of being too difficult
 function futurePicker(callback) {
     var totalTime = window.totalUserTime ? window.totalUserTime : 0;
 
-    window.db.query('future', { limit: 1, endkey: totalTime - N_FUTURE_SECONDS, include_docs: true })
+    window.db.query('future', { limit: 1, endkey: totalTime, include_docs: true })
         .then(function (response) {
             if (response.rows.length > 0) {
-                console.log('Future video picked with less than ' + (totalTime - N_FUTURE_SECONDS) + 's time');
                 callback(response.rows[0].doc);
             } else {
                 callback(null);

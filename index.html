@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>Mandarin Vids</title>
@@ -11,11 +12,6 @@
 			<h1>Mandarinvids</h1>
 			a smart Chinese video player
 		</div>
-		<!-- <div class="pull-right">
-			<a class="btn btn-danger" href="#" id="resetbutton">
-				<i class="fa fa-bomb"></i> Reset Progress
-			</a>
-		</div> -->
 		<div class="pull-right">
 			<div class="btn-group">
 				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -63,9 +59,16 @@
 				<a class="playerbutton btn btn-success" href="" id="skipbutton">
 					<i class="fa fa-star"></i> Okay
 				</a>
-				<a class="playerbutton btn btn-warning" href="" id="hardbutton">
-					<i class="fa fa-sort-amount-asc"></i> Too hard for now
-				</a>
+				<div class="btn-group pull-left">
+					<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+						Too hard for now <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="" class="playerbutton" id="20hours">Postpone 20 hours</a></li>
+						<li><a href="" class="playerbutton" id="50hours">Postpone 50 hours</a></li>
+						<li><a href="" class="playerbutton" id="100hours">Postpone 100 hours</a></li>
+					</ul>
+				</div>
 				<a class="playerbutton btn btn-danger" href="" id="neverbutton">
 					<i class="fa fa-trash"></i> Never again
 				</a>

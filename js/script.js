@@ -3,11 +3,16 @@ $(document).ready(function() {
 	window.db = new PouchDB('history', { auto_compaction: true });
 	window.db.viewCleanup();
 
-	initUser();
+	initUser(updateFuture);
+
 	createDbViews(downloadDataAndPlay);
 
 	$(document).on('visibilitychange', handleVisibilityChange);
 	$('#resetbutton').click(resetDB);
+
+	insertContactLink();
+
+	setupSubsBlocker();
 
 	$(parent).on("popstate", function() {
 		unloadPlayer();
@@ -19,11 +24,24 @@ $(document).ready(function() {
 
 		playNext(video);
 	});
-
-	insertContactLink();
-
-	setupSubsBlocker();
 });
+
+function updateFuture()
+{
+	window.db.query('future', { include_docs: true })
+		.then(function (response) {
+			for(var i = 0; i < response.rows.length; i++) {
+				console.log('from ' + response.rows[i].doc.afterTotalSeconds);
+				console.log('compared to ' + window.totalUserTime);
+				if(response.rows[i].doc.afterTotalSeconds < window.totalUserTime) {
+					response.rows[i].doc.afterTotalSeconds += 20 * 60 * 60;
+					console.log('to ' + response.rows[i].doc.afterTotalSeconds);
+					window.db.put(response.rows[i].doc);
+				}
+			}
+		})
+		.catch(errorHandler('listing future to fix them'));
+}
 
 function showWatchedTime(seconds) {
 	$('#watched-time').empty();
@@ -33,7 +51,7 @@ function showWatchedTime(seconds) {
 	$('#watched-time').append('Watched: ' + h + ':' + m);
 }
 
-function initUser() {
+function initUser(callback) {
 	window.db.get('totalUserTime')
 		.then(function(doc) {
 			window.totalUserTime = doc.time;
@@ -42,7 +60,8 @@ function initUser() {
 		.catch(function(err) {
 			window.totalUserTime = 0;
 			showWatchedTime(0);
-		});
+		})
+		.chain(callback);
 }
 
 function resetDB () {
