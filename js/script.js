@@ -83,7 +83,7 @@ function setupSubsBlocker() {
 		containment: ".playerband",
 		autoHide: true,
 		handles: "ne,se,nw,sw",
-		minHeight: 50,
+		minHeight: 30,
 		resize: function(event, ui) {
 			window.subsTop = ui.position.top;
 			window.subsHeight = ui.size.height;
