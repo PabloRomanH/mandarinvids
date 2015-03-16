@@ -102,19 +102,45 @@ function playNext(firstVideo) {
     }
 
     function donePicking(video) {
+        window.video = video;
         $('.playerbutton').unbind('click');
-        $('.playerbutton').click(video, buttonPressed);
+        $('.playerbutton').click(buttonPressed);
         $(".dropdown-menu .playerbutton").click(function() {
             $(this).closest(".dropdown-menu").prev().dropdown("toggle");
         });
+
+        $(document).unbind('keypress');
+        $(document).keypress(keyPressed);
 
         if (!firstVideo) {
             parent.history.pushState('data', '', '/' + video.source + '/' + video._id);
         }
 
+        window.video = video;
+
         applySubsState(video);
         loadPlayer(video);
     }
+}
+
+function keyPressed (event) {
+    if (event.which == 49) {
+        $('#verysoonbutton').click();
+        $('#verysoonbutton').focus();
+    } else if(event.which == 50) {
+        $('#soonbutton').click();
+        $('#soonbutton').focus();
+    } else if(event.which == 51) {
+        $('#skipbutton').click();
+        $('#skipbutton').focus();
+    } else if(event.which == 52) {
+        $('#hardbutton').click();
+    } else if(event.which == 53) {
+        $('#neverbutton').click();
+        $('#neverbutton').focus();
+    }
+
+    return true;
 }
 
 function buttonPressed(event) {
@@ -122,9 +148,12 @@ function buttonPressed(event) {
     $('.playerbutton').unbind('click', buttonPressed);
     $('.playerbutton').click(buttonPressedDummy);
 
-    if (event.data !== null) {
-        var video = event.data;
-        console.log(video._id);
+    $(document).unbind('keypress');
+    $(document).keypress(buttonPressedDummy);
+
+    if (window.video !== null) {
+        var video = window.video;
+        window.video = null;
         var button = event.currentTarget.id;
 
         if (button == 'verysoonbutton') {
@@ -139,7 +168,6 @@ function buttonPressed(event) {
             if(window.totalUserTime) {
                 video.afterTotalSeconds += window.totalUserTime; // save the watched time to watch video again in N hours
             }
-            console.log('afterTotalSeconds: ' + video.afterTotalSeconds);
         } else if (button == '50hours') {
             video.state = 'future';
             video.afterTotalSeconds = 50 * 60 * 60;
