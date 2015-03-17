@@ -26,6 +26,25 @@ $(document).ready(function() {
 	});
 });
 
+
+function setupSlider() {
+	$('.slider').slider({
+		formater: function (number) { return number + '%'; },
+		value: window.newProbability
+	})
+		.on('slideStop', function(event){
+			window.db.get('newProbability')
+				.then(function (doc) {
+					window.newProbability = event.value;
+					doc.value = event.value;
+					window.db.put(doc);
+				})
+				.catch(function (err) {
+					window.db.put({_id: 'newProbability', value: event.value});
+				});
+		});
+}
+
 // temporary code to fix entries using old time specification (submitted time instead of play-again time)
 function updateFuture()
 {
@@ -59,6 +78,16 @@ function initUser(callback) {
 			window.totalUserTime = 0;
 			showWatchedTime(0);
 		})
+		.chain(function() {
+			return window.db.get('newProbability');
+		})
+		.then(function (doc) {
+			window.newProbability = doc.value;
+		})
+		.catch(function (err) {
+			window.newProbability = 10;
+		})
+		.chain(setupSlider)
 		.chain(callback);
 }
 

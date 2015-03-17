@@ -8,6 +8,7 @@
 	</head>
 	<body>
 		<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-54e084225fb0a742" async="async"></script>
+
 		<div class="pull-left">
 			<h1>Mandarinvids</h1>
 			a smart Chinese video player
@@ -36,6 +37,9 @@
 						</a>
 					</li>
 				</ul>
+				<button type="button" class="btn btn-default" data-toggle="modal" data-target="#preferences">
+					Preferences
+				</button>
 			</div>
 		</div>
 		<div class="pull-right" id="contact"></div>
@@ -119,6 +123,24 @@
 					<a target="_blank" href="http://v.qq.com/"><img src="/img/qq.png" /></a>
 					<a target="_blank" href="http://www.56.com/"><img src="/img/56.png" /></a>
 					<a target="_blank" href="https://www.youtube.com/?gl=TW"><img src="/img/youtube.png" /></a>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="preferences" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">Mandarinvids Preferences</h4>
+				</div>
+				<div class="modal-body">
+					<p>Frequency of new videos:</p>
+					<input type="text" class="slider slider-horizontal" value="" data-slider-min="0" data-slider-max="100" data-slider-step="10" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="show">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
 				</div>
 			</div>
 		</div>

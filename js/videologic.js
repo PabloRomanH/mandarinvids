@@ -293,7 +293,7 @@ function getNumVideos(callback) {
 function pickNext(donePicking) {
     var MINIMUM_WATCHED_BEFORE_REPEATING = 10;
     var WATCHED_MAX_REPEAT_PROBABILITY = 50;
-    var MAX_PROBABILITY_WATCHED = 0.9;
+    var MAX_PROBABILITY_NEW = window.newProbability / 100;
     var VERYSOON_SOON_FACTOR = 3;
     var SOON_SKIPPED_FACTOR = 3;
 
@@ -308,7 +308,7 @@ function pickNext(donePicking) {
             if (totalWatched < 0) totalWatched = 0;
             if (totalWatched > WATCHED_MAX_REPEAT_PROBABILITY) totalWatched = WATCHED_MAX_REPEAT_PROBABILITY;
 
-            var newProbability = 1 - totalWatched / WATCHED_MAX_REPEAT_PROBABILITY * MAX_PROBABILITY_WATCHED;
+            var newProbability = totalWatched / WATCHED_MAX_REPEAT_PROBABILITY * MAX_PROBABILITY_NEW;
 
             var verysoonProbability = VERYSOON_SOON_FACTOR * SOON_SKIPPED_FACTOR * numVerySoon;
             var soonProbability = SOON_SKIPPED_FACTOR * numSoon;
