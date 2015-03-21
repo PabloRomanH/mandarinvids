@@ -223,10 +223,12 @@ function applySubsState(video) {
         window.subsTop = video.subsTop * (PLAYER_HEIGHT - PLAYER_CONTROLS_HEIGHT);
         window.subsHeight = video.subsHeight * (PLAYER_HEIGHT - PLAYER_CONTROLS_HEIGHT);
 
+        $('#subBlockSetting').prop('checked', true);
         $('#subtitleblock').show();
         $('#subtitleblock').css('top', window.subsTop);
         $('#subtitleblock').css('height', window.subsHeight);
     } else if (video.subsVisible == false) {
+        $('#subBlockSetting').prop('checked', false);
         $('#subtitleblock').hide();
     }
 }
