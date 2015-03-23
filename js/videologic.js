@@ -144,7 +144,10 @@ function keyPressed (event) {
 }
 
 function buttonPressed(event) {
+    clearTimeout(window.idleTimeout);
+
     unloadPlayer();
+
     $('.playerbutton').unbind('click', buttonPressed);
     $('.playerbutton').click(buttonPressedDummy);
 
@@ -199,6 +202,10 @@ function buttonPressed(event) {
     } else {
         playNext();
     }
+
+    var twentyMinutes = 1000 * 60 * 20;
+    window.idleTimeout = setTimeout(showIdlePopup, twentyMinutes);
+
     return false; // prevents browser from scrolling back to top when pressing the button
 }
 
