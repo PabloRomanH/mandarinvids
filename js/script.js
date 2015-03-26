@@ -114,6 +114,7 @@ function resetDB () {
 			createDbViews(downloadDataAndPlay);
 		});
 	}
+	return false;
 }
 
 function insertContactLink() {
