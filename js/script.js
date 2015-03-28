@@ -124,15 +124,55 @@ function insertContactLink() {
 }
 
 function setupSubsBlocker() {
-	$("#subtitleblock").resizable({
-		containment: ".playerband",
-		autoHide: true,
-		handles: "ne,se,nw,sw",
-		minHeight: 30,
-		resize: function(event, ui) {
-			window.subsTop = ui.position.top;
-			window.subsHeight = ui.size.height;
-		}
+	window.subsTop = 380;
+	window.subsHeight = 50;
+
+	$("#subtitledrag").mousedown(function(event) {
+		var startY = event.pageY;
+		var top = parseInt($('#subtitleblock').css('top').match(/(.*)px/)[1]);
+		var height = parseInt($('#subtitleblock').css('height').match(/(.*)px/)[1]);
+		var playerHeight = parseInt($('.playerband').css('height').match(/(.*)px/)[1]);
+
+	    $(window).mousemove(function(event) {
+			var newTop = top + event.pageY - startY;
+			if (newTop < 0) newTop = 0;
+			if (newTop + height > playerHeight) newTop = playerHeight - height;
+
+			$('#subtitleblock').css('top', newTop);
+
+			window.subsTop = newTop;
+	    });
+	});
+
+	$("#subtitleresize").mousedown(function(event) {
+		var startY = event.pageY;
+		var top = parseInt($('#subtitleblock').css('top').match(/(.*)px/)[1]);
+		var height = parseInt($('#subtitleblock').css('height').match(/(.*)px/)[1]);
+		var playerHeight = parseInt($('.playerband').css('height').match(/(.*)px/)[1]);
+
+		$(window).mousemove(function(event) {
+			var newTop = top + event.pageY - startY;
+			if (newTop < 0) newTop = 0;
+
+			var newHeight = height + 2 * (-event.pageY + startY);
+
+			if (newHeight < 30) {
+				newHeight = 30;
+				newTop = top + height / 2 - newHeight / 2;
+			}
+
+			if (newTop + newHeight > playerHeight) newHeight = playerHeight - newTop;
+
+			$('#subtitleblock').css('top', newTop);
+			$('#subtitleblock').css('height', newHeight);
+
+			window.subsTop = newTop;
+			window.subsHeight = newHeight;
+		});
+	});
+
+	$(window).mouseup(function() {
+		$(window).unbind("mousemove");
 	});
 
 	$('#subsblockclosebutton').click(function(e) {
@@ -140,15 +180,17 @@ function setupSubsBlocker() {
 		$('#subBlockSetting').prop('checked', false);
 		return false;
 	});
+
 	$('#subtitleblock').hover(
 		function(e) {
-			$("#subsblockclosebutton").show();
+			$("#subtitlebuttons").show();
 			return false;
 		},
 		function(e) {
-			$("#subsblockclosebutton").hide();
+			$("#subtitlebuttons").hide();
 			return false;
 		});
+
 	$('#subBlockSetting').click(function() {
 		if (this.checked) {
 			$("#subtitleblock").css("display", "flex");

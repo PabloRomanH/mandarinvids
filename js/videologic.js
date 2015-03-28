@@ -328,8 +328,6 @@ function pickNext(donePicking) {
 
             soonProbability /= soonProbability + numSkipped;
 
-            console.log('New probability: ' + newProbability);
-
             // list of ordered criteria to choose next video to play
             pickers = [
                 futurePicker,
