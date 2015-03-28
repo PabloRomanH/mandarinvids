@@ -133,6 +133,8 @@ function setupSubsBlocker() {
 		var height = parseInt($('#subtitleblock').css('height').match(/(.*)px/)[1]);
 		var playerHeight = parseInt($('.playerband').css('height').match(/(.*)px/)[1]);
 
+		$('#subtitleblock').removeClass('notmoved');
+
 	    $(window).mousemove(function(event) {
 			var newTop = top + event.pageY - startY;
 			if (newTop < 0) newTop = 0;
@@ -149,6 +151,8 @@ function setupSubsBlocker() {
 		var top = parseInt($('#subtitleblock').css('top').match(/(.*)px/)[1]);
 		var height = parseInt($('#subtitleblock').css('height').match(/(.*)px/)[1]);
 		var playerHeight = parseInt($('.playerband').css('height').match(/(.*)px/)[1]);
+
+		$('#subtitleblock').removeClass('notmoved');
 
 		$(window).mousemove(function(event) {
 			var newTop = top + event.pageY - startY;
@@ -194,6 +198,7 @@ function setupSubsBlocker() {
 	$('#subBlockSetting').click(function() {
 		if (this.checked) {
 			$("#subtitleblock").css("display", "flex");
+			$('#subtitleblock').removeClass('notmoved');
 		} else {
 			$("#subtitleblock").hide();
 		}

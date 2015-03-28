@@ -75,6 +75,10 @@ h1 {
 	display: none;
 }
 
+#subtitleblock.notmoved {
+	background-color: #bebebe;
+}
+
 #subtitlebuttons {
 	position: relative;
 	display: none;

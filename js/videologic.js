@@ -234,9 +234,12 @@ function applySubsState(video) {
         $("#subtitleblock").css("display", "flex");
         $('#subtitleblock').css('top', window.subsTop);
         $('#subtitleblock').css('height', window.subsHeight);
+        $('#subtitleblock').addClass('notmoved');
     } else if (video.subsVisible == false) {
         $('#subBlockSetting').prop('checked', false);
         $('#subtitleblock').hide();
+    } else {
+        $('#subtitleblock').removeClass('notmoved');
     }
 }
 
