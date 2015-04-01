@@ -206,7 +206,7 @@ function setupSubsBlocker() {
 }
 
 function handleVisibilityChange() {
-	if(window.idle === true) {
+	if(window.idle !== true) {
 		if (document['hidden']) {
 			stopCountingTime();
 		} else {
