@@ -194,6 +194,13 @@ function buttonPressed(event) {
 
         video = normalizeId(video);
 
+        if(!video.playcount) {
+            video.playcount = 1;
+        } else {
+            video.playcount++;
+        }
+        console.log(video.playcount);
+
         window.db.put(video)
             .catch(errorHandler('inserting skipped video to database'))
             .chain(function() {
