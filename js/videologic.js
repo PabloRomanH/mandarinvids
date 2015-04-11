@@ -225,8 +225,6 @@ function includeSubsState(video) {
         video.subsHeight = window.subsHeight / (PLAYER_HEIGHT - PLAYER_CONTROLS_HEIGHT);
     } else {
         video.subsVisible = false;
-        video.subsTop = undefined;
-        video.subsHeight = undefined;
     }
 
     return video;
