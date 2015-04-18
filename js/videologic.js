@@ -210,9 +210,6 @@ function buttonPressed(event) {
         playNext();
     }
 
-    var twentyMinutes = 1000 * 60 * 20;
-    window.idleTimeout = setTimeout(showIdlePopup, twentyMinutes);
-
     return false; // prevents browser from scrolling back to top when pressing the button
 }
 
