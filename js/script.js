@@ -10,14 +10,9 @@ $(document).ready(function() {
 	$(document).on('visibilitychange', handleVisibilityChange);
 	$('#resetbutton').click(resetDB);
 
-	$('#idle').on('hidden.bs.modal', idlePopupHidden);
-
 	insertContactLink();
 
 	setupSubsBlocker();
-
-	var twentyMinutes = 1000 * 60 * 20;
-	window.idleTimeout = setTimeout(showIdlePopup, twentyMinutes);
 
 	$(parent).on("popstate", function() {
 		unloadPlayer();
@@ -30,17 +25,6 @@ $(document).ready(function() {
 		playNext(video);
 	});
 });
-
-function showIdlePopup() {
-    $('#idle').modal();
-	window.idle = true;
-    stopCountingTime();
-}
-
-function idlePopupHidden() {
-	startCountingTime();
-	window.idle = false;
-}
 
 function setupSlider() {
 	$('.slider').slider({
@@ -206,12 +190,10 @@ function setupSubsBlocker() {
 }
 
 function handleVisibilityChange() {
-	if(window.idle !== true) {
-		if (document['hidden']) {
-			stopCountingTime();
-		} else {
-			startCountingTime();
-		}
+	if (document['hidden']) {
+		stopCountingTime();
+	} else {
+		startCountingTime();
 	}
 }
 
