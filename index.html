@@ -134,17 +134,25 @@
 		<div class="modal fade" id="preferences" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">Mandarinvids Preferences</h4>
-				</div>
-				<div class="modal-body">
-					<p>Frequency of new videos:</p>
-					<input type="text" class="slider slider-horizontal" value="" data-slider-min="0" data-slider-max="100" data-slider-step="10" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="show">
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="myModalLabel">Mandarinvids Preferences</h4>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<p>Frequency of new videos:</p>
+								<input type="text" id="freqslider" class="slider slider-horizontal form-control" value="" data-slider-min="0" data-slider-max="100" data-slider-step="10" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="show">
+							</div>
+
+							<div class="checkbox">
+								<label><input type="checkbox" id="subson">Enable subtitle block</label>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
 				</div>
 			</div>
 		</div>

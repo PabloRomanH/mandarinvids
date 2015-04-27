@@ -228,20 +228,24 @@ function includeSubsState(video) {
 }
 
 function applySubsState(video) {
-    if(video.subsVisible) {
-        window.subsTop = video.subsTop * (PLAYER_HEIGHT - PLAYER_CONTROLS_HEIGHT);
-        window.subsHeight = video.subsHeight * (PLAYER_HEIGHT - PLAYER_CONTROLS_HEIGHT);
-
-        $('#subBlockSetting').prop('checked', true);
-        $("#subtitleblock").css("display", "flex");
-        $('#subtitleblock').css('top', window.subsTop);
-        $('#subtitleblock').css('height', window.subsHeight);
-        $('#subtitleblock').addClass('notmoved');
-    } else if (video.subsVisible == false) {
-        $('#subBlockSetting').prop('checked', false);
+    if (!window.subsOn) {
         $('#subtitleblock').hide();
     } else {
-        $('#subtitleblock').removeClass('notmoved');
+        if(video.subsVisible) {
+            window.subsTop = video.subsTop * (PLAYER_HEIGHT - PLAYER_CONTROLS_HEIGHT);
+            window.subsHeight = video.subsHeight * (PLAYER_HEIGHT - PLAYER_CONTROLS_HEIGHT);
+
+            $('#subBlockSetting').prop('checked', true);
+            $("#subtitleblock").css("display", "flex");
+            $('#subtitleblock').css('top', window.subsTop);
+            $('#subtitleblock').css('height', window.subsHeight);
+            $('#subtitleblock').addClass('notmoved');
+        } else if (video.subsVisible == false) {
+            $('#subBlockSetting').prop('checked', false);
+            $('#subtitleblock').hide();
+        } else {
+            $('#subtitleblock').removeClass('notmoved');
+        }
     }
 }
 

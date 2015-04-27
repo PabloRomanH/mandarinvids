@@ -26,7 +26,7 @@ $(document).ready(function() {
 	});
 });
 
-function setupSlider() {
+function setupPreferences() {
 	$('.slider').slider({
 		formater: function (number) { return number + '%'; },
 		value: window.newProbability
@@ -40,6 +40,20 @@ function setupSlider() {
 				})
 				.catch(function (err) {
 					window.db.put({_id: 'newProbability', value: event.value});
+				});
+		});
+
+	$('#subson').prop('checked', window.subsOn)
+		.click(function() {
+			var checked = this.checked;
+			window.subsOn = this.checked;
+			window.db.get('subsOn')
+				.then(function (doc) {
+					doc.value = window.subsOn;
+					return window.db.put(doc)
+				})
+				.catch(function (err) {
+					window.db.put({_id: 'subsOn', value: checked});
 				});
 		});
 }
@@ -86,7 +100,16 @@ function initUser(callback) {
 		.catch(function (err) {
 			window.newProbability = 10;
 		})
-		.chain(setupSlider)
+		.chain(function() {
+			return window.db.get('subsOn');
+		})
+		.then(function (doc) {
+			window.subsOn = doc.value;
+		})
+		.catch(function (err) {
+			window.subsOn = true;
+		})
+		.chain(setupPreferences)
 		.chain(callback);
 }
 
@@ -181,8 +204,10 @@ function setupSubsBlocker() {
 
 	$('#subBlockSetting').click(function() {
 		if (this.checked) {
-			$("#subtitleblock").css("display", "flex");
-			$('#subtitleblock').removeClass('notmoved');
+			if (window.subsOn) {
+				$("#subtitleblock").css("display", "flex");
+				$('#subtitleblock').removeClass('notmoved');
+		    }
 		} else {
 			$("#subtitleblock").hide();
 		}
